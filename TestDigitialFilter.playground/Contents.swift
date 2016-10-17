@@ -99,3 +99,106 @@ let z=SIGN(a: 1.0, b: 5.0)
 
 print(z)
 
+func Hjw (aBot: [Double],bTop: [Double],gain: Double, lPoints: Int) -> (Mag:[Double], Phase:[Double]) {//start
+    
+    let mTopNum=bTop.count
+    let nBotNum=aBot.count
+    
+    
+    var HMAG=[Double](repeating:0.0, count: lPoints)
+    var HPHA=[Double](repeating:0.0, count: lPoints)
+    
+    var eJW1=Complex(r:0.0,j:0.0)
+    var eJW=Complex(r:0.0,j:0.0)
+    var eJWK=Complex(r:0.0,j:0.0)
+    var HW=Complex(r: 0,j: 0)
+    var HWN=Complex(r: 0,j: 0)
+    var HWD=Complex(r: 0,j: 0)
+    var G1=Complex(r: 0,j: 0)
+    var DW:Double=0.0
+    
+    let EPS=1.0e-7
+    var x:Double=0.0
+    
+    
+    
+    if lPoints>1{//start if
+        DW=pi/Double(lPoints-1)
+    }//end if
+    
+    for i in (0..<lPoints){//start for i
+        x=(-Double(i-1)*DW)
+        eJW1.r=0.0
+        eJW1.j=x
+        eJW=CEXP(c1: eJW1)
+        print("eJW=\(eJW)")
+        eJWK.r=1.0
+        eJWK.j=0.0
+        print(eJWK)
+        for k in (0..<mTopNum){//start for index
+            
+            HWN.r=HWN.r+bTop[k]
+            HWN=HWN*eJWK
+            eJWK=eJWK*eJW
+            
+        }//end for index 100
+        
+        HWD.r=1.0
+        HWD.j=0.0
+        eJWK=eJW
+        
+        for k in (0..<nBotNum){//for index1
+            
+            HWD.r=HWD.r+aBot[k]
+            HWD.j=0.0
+            HWD=HWD*eJWK
+            eJWK=eJWK*eJW
+             print("eJWK=\(eJWK)")
+            
+        }//end index1 200
+        
+        G1.r=gain
+        G1.j=0.0
+        HW=HWN*G1
+        HW=HW/HWD
+
+        
+        if abs(HW.r)<EPS && abs(HW.j)<EPS {//start if1
+            if i>2 {//start if2
+                HPHA[i]=2.0*HPHA[i-1]-HPHA[i-2]
+            }//end if2
+            else if abs(HW.r)<EPS{//start else if
+            
+                HPHA[i]=SIGN(a: 1.0, b: HW.j)*0.5*pi
+            }//end else if
+                  }//end if1
+            else
+            {//start else
+                
+                let IX=(1.0-SIGN(a: 1.0, b: HW.r))/2.0
+                let IY=SIGN(a: 1.0, b: HW.j)
+                HPHA[i]=atan(HW.j/HW.r)+IX*IY*pi
+            }//end else
+            
+      
+        HMAG[i]=CABS(c1: HW)
+        
+        
+        
+
+
+
+     }//end for i 300
+    return (Mag:HMAG,Phase:HPHA)
+}//end
+
+
+let A=[1.0, -0.8]
+let B=[1.0]
+let gain=0.04
+let points=10
+
+let output=Hjw(aBot: A, bTop: B, gain: gain, lPoints: points)
+
+let mag=output.Mag
+let phase=output.Phase
