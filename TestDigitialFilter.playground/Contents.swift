@@ -122,15 +122,7 @@ func db (a: [Double], max: Double) -> [Double] {
 
 
 //test
-var HW=Complex(r: 0.0,j: 1.0)
-var HWN=Complex(r: 1.0,j: 1.0)
-var HWD=Complex(r: 0,j: 0)
 
-
-let y = CEXP(c1: HW)
-let x = HW*HWD
-
-print(x)
 
 let z=SIGN(a: 1.0, b: 5.0)
 
@@ -153,6 +145,8 @@ func Hjw (aBot: [Double],bTop: [Double],gain: Double, lPoints: Int) -> (Mag:[Dou
     var HWN=Complex(r: 0,j: 0)
     var HWD=Complex(r: 0,j: 0)
     var G1=Complex(r: 0,j: 0)
+    var B1=Complex(r: 0,j: 0)
+    var A1=Complex(r: 0,j: 0)
     var DW:Double=0.0
     
     let EPS=1.0e-7
@@ -173,38 +167,56 @@ func Hjw (aBot: [Double],bTop: [Double],gain: Double, lPoints: Int) -> (Mag:[Dou
         eJW1.r=0.0
         eJW1.j=x
         eJW=CEXP(c1: eJW1)
-        print("\neJW=\(eJW)")
+        print("eJW=\(eJW)")
+        
+        HWN.r=0.0
+        HWN.j=0.0
+        
+        print("\nHWN=\(HWN)")
         eJWK.r=1.0
         eJWK.j=0.0
-        print(eJWK)
-        for k in (0..<mTopNum){//start for index
+        print("eJWK=\(eJWK)")
+        
+        for z in (0..<mTopNum){//start for index
+            B1.r=bTop[z]
+            B1.j=0.0
+            eJWK=B1*eJWK
+            print("eJWK[\(z)]=\(eJWK)")
+          
+            HWN=HWN+eJWK
+            print("HWN[\(z)]=\(HWN)")
             
-            HWN.r=HWN.r+bTop[k]
-            HWN=HWN*eJWK
-            eJWK=eJWK*eJW
-            print("HWN=\(HWN)")
-            print("eJWK=\(eJWK)")
             
         }//end for index 100
 
         HWD.r=1.0
         HWD.j=0.0
-        eJWK=eJW
+        print("HWD=\(HWD)")
         
-        for k in (0..<nBotNum){//for index1
+        eJWK=eJW
+        print("eJWK=\(eJWK)")
+        
+        for p in (0..<nBotNum){//for index1
+            A1.r=aBot[p]
+            A1.j=0.0
+            eJWK=A1*eJWK
+            print("eJWK[\(p)]=\(eJWK)")
             
-            HWD.r=HWD.r+aBot[k]
-            HWD.j=0.0
-            HWD=HWD*eJWK
+            HWD=HWD+eJWK
+            
+            print("HWD[\(p)]=\(HWD)")
             eJWK=eJWK*eJW
-             print("eJWK=\(eJWK)")
+            print("eJWK[\(p)]=\(eJWK)")
             
         }//end index1 200
 
         G1.r=gain
         G1.j=0.0
-        HW=HWN*G1
-        HW=HW/HWD
+        HWN=HWN*G1
+        
+         print("HWN=\(HWN)")
+        print("HWD=\(HWD)")
+        HW=HWN/HWD
           print("HW=\(HW)")
 
         
@@ -244,8 +256,8 @@ func Hjw (aBot: [Double],bTop: [Double],gain: Double, lPoints: Int) -> (Mag:[Dou
 }//end
 
 
-let A=[1.0, -0.8]
-let B=[1.0]
+let A=[-0.8]
+let B=[1.0,0.0]
 let gain=1.0
 let points=4
 
