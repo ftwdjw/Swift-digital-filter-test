@@ -3,7 +3,27 @@
    version = "3.0">
    <TimelineItems>
       <LoggerValueHistoryTimelineItem
-         documentLocation = "#CharacterRangeLen=3&amp;CharacterRangeLoc=4377&amp;EndingColumnNumber=8&amp;EndingLineNumber=202&amp;StartingColumnNumber=5&amp;StartingLineNumber=202&amp;Timestamp=498427910.996421"
+         documentLocation = "#CharacterRangeLen=12&amp;CharacterRangeLoc=5147&amp;EndingColumnNumber=29&amp;EndingLineNumber=228&amp;StartingColumnNumber=17&amp;StartingLineNumber=228&amp;Timestamp=498570056.035618"
+         selectedRepresentationIndex = "0"
+         shouldTrackSuperviewWidth = "NO">
+      </LoggerValueHistoryTimelineItem>
+      <LoggerValueHistoryTimelineItem
+         documentLocation = "#CharacterRangeLen=24&amp;CharacterRangeLoc=5062&amp;EndingColumnNumber=49&amp;EndingLineNumber=224&amp;StartingColumnNumber=25&amp;StartingLineNumber=224&amp;Timestamp=498570000.622112"
+         selectedRepresentationIndex = "0"
+         shouldTrackSuperviewWidth = "NO">
+      </LoggerValueHistoryTimelineItem>
+      <LoggerValueHistoryTimelineItem
+         documentLocation = "#CharacterRangeLen=3&amp;CharacterRangeLoc=5484&amp;EndingColumnNumber=8&amp;EndingLineNumber=253&amp;StartingColumnNumber=5&amp;StartingLineNumber=253&amp;Timestamp=498570192.825894"
+         selectedRepresentationIndex = "0"
+         shouldTrackSuperviewWidth = "NO">
+      </LoggerValueHistoryTimelineItem>
+      <LoggerValueHistoryTimelineItem
+         documentLocation = "#CharacterRangeLen=5&amp;CharacterRangeLoc=5527&amp;EndingColumnNumber=10&amp;EndingLineNumber=256&amp;StartingColumnNumber=5&amp;StartingLineNumber=256&amp;Timestamp=498570192.826041"
+         selectedRepresentationIndex = "0"
+         shouldTrackSuperviewWidth = "NO">
+      </LoggerValueHistoryTimelineItem>
+      <LoggerValueHistoryTimelineItem
+         documentLocation = "#CharacterRangeLen=5&amp;CharacterRangeLoc=5503&amp;EndingColumnNumber=10&amp;EndingLineNumber=254&amp;StartingColumnNumber=5&amp;StartingLineNumber=254&amp;Timestamp=498570192.826177"
          selectedRepresentationIndex = "0"
          shouldTrackSuperviewWidth = "NO">
       </LoggerValueHistoryTimelineItem>

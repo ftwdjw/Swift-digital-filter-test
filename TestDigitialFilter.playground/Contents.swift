@@ -1,6 +1,8 @@
 //: Playground - noun: a place where people can play
 
 import UIKit
+import Accelerate
+
 let pi = 4.0*atan(1.0)
 
 struct Complex {
@@ -84,6 +86,41 @@ struct MagAng {
     var mag = 0.0, ang = 0.0
 }
 
+public func max1 (a: [Double]) -> Double {
+    //Vector maximum magnitude; double precision.
+    var result = 0.0
+    vDSP_maxmgvD(a,1,&result,UInt(a.count))
+    return result
+}
+
+
+func db (a: [Double], max: Double) -> [Double] {
+    //Vector maximum magnitude; double precision.
+    
+    var result=[Double](repeating:0.0, count: a.count )
+    var max2=max
+    
+    
+    /*__A
+     Single-precision real input vector
+     __IA
+     Stride for A
+     __B
+     Pointer to single-precision real input scalar: zero reference
+     __C
+     Single-precision real output vector
+     __IC
+     Stride for C
+     __N
+     The number of elements to process
+     __F
+     Power (0) or amplitude (1) flag*/
+    vDSP_vdbconD(a, 1, &max2, &result, 1, UInt(a.count), 1)
+    return result
+}
+
+
+
 //test
 var HW=Complex(r: 0.0,j: 1.0)
 var HWN=Complex(r: 1.0,j: 1.0)
@@ -99,7 +136,7 @@ let z=SIGN(a: 1.0, b: 5.0)
 
 print(z)
 
-func Hjw (aBot: [Double],bTop: [Double],gain: Double, lPoints: Int) -> (Mag:[Double], Phase:[Double]) {//start
+func Hjw (aBot: [Double],bTop: [Double],gain: Double, lPoints: Int) -> (Mag:[Double], MagDB:[Double], Phase:[Double],Omega:[Double]) {//start
     
     let mTopNum=bTop.count
     let nBotNum=aBot.count
@@ -107,6 +144,7 @@ func Hjw (aBot: [Double],bTop: [Double],gain: Double, lPoints: Int) -> (Mag:[Dou
     
     var HMAG=[Double](repeating:0.0, count: lPoints)
     var HPHA=[Double](repeating:0.0, count: lPoints)
+    var Omega=[Double]()
     
     var eJW1=Complex(r:0.0,j:0.0)
     var eJW=Complex(r:0.0,j:0.0)
@@ -127,11 +165,15 @@ func Hjw (aBot: [Double],bTop: [Double],gain: Double, lPoints: Int) -> (Mag:[Dou
     }//end if
     
     for i in (0..<lPoints){//start for i
-        x=(-Double(i-1)*DW)
+        x=(-Double(i)*DW)
+        
+        print("\nomega=\(x)")
+        Omega.append(x)
+        
         eJW1.r=0.0
         eJW1.j=x
         eJW=CEXP(c1: eJW1)
-        print("eJW=\(eJW)")
+        print("\neJW=\(eJW)")
         eJWK.r=1.0
         eJWK.j=0.0
         print(eJWK)
@@ -140,9 +182,11 @@ func Hjw (aBot: [Double],bTop: [Double],gain: Double, lPoints: Int) -> (Mag:[Dou
             HWN.r=HWN.r+bTop[k]
             HWN=HWN*eJWK
             eJWK=eJWK*eJW
+            print("HWN=\(HWN)")
+            print("eJWK=\(eJWK)")
             
         }//end for index 100
-        
+
         HWD.r=1.0
         HWD.j=0.0
         eJWK=eJW
@@ -156,11 +200,12 @@ func Hjw (aBot: [Double],bTop: [Double],gain: Double, lPoints: Int) -> (Mag:[Dou
              print("eJWK=\(eJWK)")
             
         }//end index1 200
-        
+
         G1.r=gain
         G1.j=0.0
         HW=HWN*G1
         HW=HW/HWD
+          print("HW=\(HW)")
 
         
         if abs(HW.r)<EPS && abs(HW.j)<EPS {//start if1
@@ -185,20 +230,30 @@ func Hjw (aBot: [Double],bTop: [Double],gain: Double, lPoints: Int) -> (Mag:[Dou
         
         
         
+        
 
 
 
      }//end for i 300
-    return (Mag:HMAG,Phase:HPHA)
+    
+    
+    let max=max1(a: HMAG)
+    let out=db(a: HMAG, max: max)
+    
+    return (Mag:HMAG,MagDB:out,Phase:HPHA,Omega:Omega)
 }//end
 
 
 let A=[1.0, -0.8]
 let B=[1.0]
-let gain=0.04
-let points=10
+let gain=1.0
+let points=4
 
 let output=Hjw(aBot: A, bTop: B, gain: gain, lPoints: points)
 
 let mag=output.Mag
 let phase=output.Phase
+
+let omega=output.Omega
+
+let db1=output.MagDB
