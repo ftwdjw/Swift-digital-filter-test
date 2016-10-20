@@ -162,7 +162,7 @@ func Hjw (aBot: [Double],bTop: [Double],gain: Double, lPoints: Int) -> (Mag:[Dou
         x=(-Double(i)*DW)
         
         print("\nomega=\(x)")
-        Omega.append(x)
+        Omega.append(-x)
         
         eJW1.r=0.0
         eJW1.j=x
